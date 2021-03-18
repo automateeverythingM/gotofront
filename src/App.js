@@ -18,10 +18,6 @@ function App() {
         };
     }, []);
 
-    const handleSignIn = () => {
-        auth.signInWithPopup(googleProvider);
-    };
-
     return (
         <div className="App">
             <Router>
@@ -30,9 +26,8 @@ function App() {
                     <Room path="/:roomname" />
                 </Layout>
             </Router>
-            <button onClick={handleSignIn}>sign in</button>
         </div>
     );
 }
 
-export default connect()(App);
+export default App;

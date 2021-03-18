@@ -11,7 +11,7 @@ export const onAuthChange = (dispatch) => {
                 })
             );
         } else {
-            setUser(null);
+            dispatch(setUser(null));
         }
 
         return unsubscribe;

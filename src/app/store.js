@@ -6,7 +6,7 @@ import userReducer from "./reducers/userReducer";
 export default configureStore({
     reducer: {
         counter: counterReducer,
-        room: roomReducer,
-        user: userReducer,
+        roomState: roomReducer,
+        userState: userReducer,
     },
 });
