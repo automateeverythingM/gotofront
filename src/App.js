@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import "./App.css";
-import { setUser } from "./app/reducers/userReducer";
-import { auth, googleProvider } from "./firebase";
 import { Router } from "@reach/router";
 import Layout from "./pages/Layout";
 import HomePage from "./pages/HomePage";

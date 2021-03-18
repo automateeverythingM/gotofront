@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { auth, githubProvider, googleProvider } from "../firebase";
 import md5 from "md5";
-import { useSelector } from "react-redux";
-import { userSelector } from "../app/reducers/userReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, userSelector } from "../app/reducers/userReducer";
 
 function HomePage() {
     const [errorMsg, setErrorMsg] = useState("");
     const user = useSelector(userSelector);
+    const dispatch = useDispatch();
 
     const handleSignInGoogle = () => {
         auth.signInWithPopup(googleProvider).catch((error) => {
@@ -23,23 +24,31 @@ function HomePage() {
         auth.signOut();
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const { username, email, password } = e.target;
 
-        auth.signInWithEmailAndPassword(email.value, password.value)
-            .then((user) => {
-                user.user.updateProfile({
-                    displayName: username,
-                    photoURL: `http://www.gravatar.com/avatar/${md5(
-                        email
-                    )}?d=identicon`,
-                });
-            })
-            .catch((error) => {
-                setErrorMsg(error.message);
-            });
+        const userRef = await auth.createUserWithEmailAndPassword(
+            email.value,
+            password.value
+        );
+
+        await userRef.user.updateProfile({
+            displayName: username.value,
+            photoURL: `http://www.gravatar.com/avatar/${md5(
+                email.value
+            )}?d=identicon`,
+        });
+
+        const { displayName, photoURL } = userRef.user;
+
+        dispatch(setUser({ displayName, photoURL }));
+
+        // auth.signInWithEmailAndPassword(email.value, password.value)
+        // .catch((error) => {
+        //     setErrorMsg(error.message);
+        // });
     };
 
     return (
@@ -92,7 +101,7 @@ function HomePage() {
                 </label>
                 <button type="submit">Register with Email and Password</button>
                 <br />
-                <button type="submit">Login with Email and Password</button>
+                {/* <button type="submit">Login with Email and Password</button> */}
             </form>
             <div style={{ marginTop: "2rem" }}>
                 <br />
