@@ -1,9 +1,10 @@
 import React from "react";
 
-function Room() {
+function Room(props) {
+    const { roomname } = props;
     return (
         <div>
-            <h1>Room</h1>
+            <h1>Room name : {roomname}</h1>
         </div>
     );
 }
