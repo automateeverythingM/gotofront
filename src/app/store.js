@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "../features/counter/counterSlice";
-import roomReducer from "./reducers/roomReducer";
 import userReducer from "./reducers/userReducer";
+import roomReducer from "./reducers/roomReducer";
 
 export default configureStore({
     reducer: {
