@@ -9,6 +9,7 @@ import { onAuthChange } from "./utils/authHelpers";
 
 function App() {
     const dispatch = useDispatch();
+
     useEffect(() => {
         const unsubscribe = onAuthChange(dispatch);
         return () => {

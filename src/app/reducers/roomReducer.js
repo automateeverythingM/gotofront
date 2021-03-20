@@ -5,6 +5,7 @@ export const roomSlice = createSlice({
     initialState: {
         roomName: "",
         messages: [],
+        users: [],
     },
     reducers: {
         setRoomName: (state, action) => {
@@ -17,6 +18,12 @@ export const roomSlice = createSlice({
         pushReceivedMessage: (state, action) => {
             state.messages.push(action.payload);
         },
+        setInitialStateOfRoom: (state, action) => {
+            const { messages, users } = action.payload;
+
+            state.messages = messages;
+            state.users = users;
+        },
     },
 });
 
@@ -24,9 +31,11 @@ export const {
     setRoomName,
     pushMessage,
     pushReceivedMessage,
+    setInitialStateOfRoom,
 } = roomSlice.actions;
 
 export const messagesSelector = (state) => state.roomState.messages;
+export const usersSelector = (state) => state.roomState.users;
 export default roomSlice.reducer;
 
 export const emitMessage = (message) => (dispatch) => {

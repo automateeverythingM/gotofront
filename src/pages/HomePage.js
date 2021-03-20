@@ -3,6 +3,7 @@ import { auth, githubProvider, googleProvider } from "../firebase";
 import md5 from "md5";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, userSelector } from "../app/reducers/userReducer";
+import { navigate } from "@reach/router";
 
 function HomePage() {
     const [errorMsg, setErrorMsg] = useState("");
@@ -51,6 +52,12 @@ function HomePage() {
         // });
     };
 
+    const handleChangeRoom = (e) => {
+        e.preventDefault();
+        const { roomName } = e.target;
+        if (roomName.value) navigate(`/${roomName.value}`);
+    };
+
     return (
         <div>
             <h1>HomePage</h1>
@@ -62,6 +69,21 @@ function HomePage() {
             ) : (
                 <h3>No User</h3>
             )}
+            <form onSubmit={handleChangeRoom} style={{ margin: "2rem auto" }}>
+                <label htmlFor="roomname">Enter room name</label>
+                <input
+                    id="roomname"
+                    placeholder="Enter room name"
+                    name="roomName"
+                    type="text"
+                    style={{
+                        display: "block",
+                        margin: "auto",
+                        width: "400px",
+                        fontSize: "2rem",
+                    }}
+                />
+            </form>
             <form onSubmit={handleSubmit}>
                 <label>
                     UserName
