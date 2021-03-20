@@ -5,6 +5,7 @@ import { socket } from "..";
 import {
     messagesSelector,
     pushMessage,
+    pushNewUser,
     pushReceivedMessage,
     setInitialStateOfRoom,
 } from "../app/reducers/roomReducer";
@@ -22,6 +23,10 @@ function Room(props) {
         socket.emit("join room", { roomName: roomname, user });
         socket.on("updateMessages", (data) => {
             dispatch(pushReceivedMessage(data));
+        });
+
+        socket.on("newUser", (user) => {
+            dispatch(pushNewUser(user));
         });
 
         socket.on("initialState", (data) => {

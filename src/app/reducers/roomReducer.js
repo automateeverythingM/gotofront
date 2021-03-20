@@ -18,6 +18,9 @@ export const roomSlice = createSlice({
         pushReceivedMessage: (state, action) => {
             state.messages.push(action.payload);
         },
+        pushNewUser: (state, action) => {
+            state.users.push(action.payload);
+        },
         setInitialStateOfRoom: (state, action) => {
             const { messages, users } = action.payload;
 
@@ -32,6 +35,7 @@ export const {
     pushMessage,
     pushReceivedMessage,
     setInitialStateOfRoom,
+    pushNewUser,
 } = roomSlice.actions;
 
 export const messagesSelector = (state) => state.roomState.messages;
