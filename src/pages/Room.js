@@ -43,6 +43,7 @@ function Room(props) {
             socket.emit("leaveRoom", roomname, user);
             dispatch(clearState());
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSubmit = (e) => {

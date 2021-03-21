@@ -14,10 +14,6 @@ export const roomSlice = createSlice({
         },
         pushMessage: (state, action) => {
             const { message, roomName } = action.payload;
-            console.log(
-                "🚀 ~ file: roomReducer.js ~ line 17 ~ roomName",
-                roomName
-            );
             state.messages.push(message);
             socket.emit("newMessage", message, roomName);
         },
