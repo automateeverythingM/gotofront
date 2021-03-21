@@ -61,8 +61,8 @@ function Room(props) {
                 <div>
                     <h3>Users in this room</h3>
                     <ul style={{ background: "teal" }}>
-                        {users.map(({ photoURL, displayName }) => (
-                            <li>
+                        {users.map(({ photoURL, displayName, uid }) => (
+                            <li key={uid}>
                                 <div>
                                     <img
                                         src={photoURL}
