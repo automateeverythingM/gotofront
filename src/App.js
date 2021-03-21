@@ -1,13 +1,32 @@
-import React from 'react';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import "./App.css";
+import { Router } from "@reach/router";
+import Layout from "./pages/Layout";
+import HomePage from "./pages/HomePage";
+import Room from "./pages/Room";
+import { onAuthChange } from "./utils/authHelpers";
 
 function App() {
-  return (
-    <div className="App">
-      <h1>HomePage</h1>
-    </div>
-  );
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const unsubscribe = onAuthChange(dispatch);
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
+    return (
+        <div className="App">
+            <Router>
+                <Layout path="/">
+                    <HomePage exact path="/" />
+                    <Room path="/:roomname" />
+                </Layout>
+            </Router>
+        </div>
+    );
 }
 
 export default App;
