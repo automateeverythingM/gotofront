@@ -8,10 +8,8 @@ import { io } from "socket.io-client";
 export const socket = io("http://localhost:5001");
 
 ReactDOM.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <App />
-        </Provider>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <App />
+    </Provider>,
     document.getElementById("root")
 );

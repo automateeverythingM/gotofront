@@ -8,6 +8,7 @@ export const onAuthChange = (dispatch) => {
                 setUser({
                     displayName: user.displayName,
                     photoURL: user.photoURL,
+                    uid: user.uid,
                 })
             );
         } else {
