@@ -13,7 +13,7 @@ import {
 } from "../app/reducers/roomReducer";
 import { userSelector } from "../app/reducers/userReducer";
 import { usersSelector } from "../app/reducers/roomReducer";
-import { debounce } from "loadsh";
+import useTypingDebounce from "../utils/roomHelpers/useTypingDebounce";
 
 function Room(props) {
   const { roomname } = props;
@@ -23,34 +23,19 @@ function Room(props) {
   const users = useSelector(usersSelector);
   const [statusDisplay, setStatusDisplay] = useState();
   const [userTyping, setUserTyping] = useState(false);
-
-  const debounceStartTyping = useMemo(
-    () =>
-      debounce(
-        () => {
-          console.log("start typing");
-          socket.emit("typing", {
-            roomName: roomname,
-            displayName: "marko",
-          });
-        },
-        3000,
-        {
-          leading: true,
-          trailing: false,
-        }
-      ),
-    []
-  );
-  const debounceStopTyping = useMemo(
-    () =>
-      debounce(() => {
-        console.log("stopTyping");
-        socket.emit("stopTyping", {
-          roomName: roomname,
-        });
-      }, 3000),
-    []
+  const TypingDebounce = useTypingDebounce(
+    () => {
+      socket.emit("typing", {
+        roomName: roomname,
+        displayName: "marko",
+      });
+    },
+    () => {
+      socket.emit("stopTyping", {
+        roomName: roomname,
+      });
+    },
+    3000
   );
 
   useEffect(() => {
@@ -63,6 +48,7 @@ function Room(props) {
     socket.on("user left room", (user) => {
       dispatch(removeUser(user.uid));
       setStatusDisplay(`user: ${user.displayName} left room`);
+      setTimeout(() => setStatusDisplay(null), 3000);
     });
 
     socket.on("userTyping", (data) => {
@@ -107,15 +93,7 @@ function Room(props) {
   };
 
   const handleInputChange = () => {
-    debounceStartTyping();
-    debounceStopTyping();
-    // debouncedStopTyping(() => {
-
-    //   console.log("object");
-    //   socket.emit("stopTyping", {
-    //     roomName: roomname,
-    //   });
-    // }, 3000);
+    TypingDebounce();
   };
 
   return (
