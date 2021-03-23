@@ -82,6 +82,7 @@ function HomePage() {
                         width: "400px",
                         fontSize: "2rem",
                     }}
+                    autoComplete="off"
                 />
             </form>
             <form onSubmit={handleSubmit}>

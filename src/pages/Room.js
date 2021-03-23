@@ -3,9 +3,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { socket } from "..";
 import {
+    clearState,
     messagesSelector,
     pushMessage,
+    pushNewUser,
     pushReceivedMessage,
+    removeUser,
     setInitialStateOfRoom,
 } from "../app/reducers/roomReducer";
 import { userSelector } from "../app/reducers/userReducer";
@@ -24,20 +27,29 @@ function Room(props) {
             dispatch(pushReceivedMessage(data));
         });
 
+        socket.on("newUser", (user) => {
+            dispatch(pushNewUser(user));
+        });
+
         socket.on("initialState", (data) => {
-            console.log(
-                "🚀 ~ file: Room.js ~ line 26 ~ socket.on ~ data",
-                data
-            );
             dispatch(setInitialStateOfRoom(data));
         });
+
+        socket.on("userLeft", (id) => {
+            dispatch(removeUser(id));
+        });
+
+        return () => {
+            socket.emit("leaveRoom", roomname, user);
+            dispatch(clearState());
+        };
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const { messageInput } = e.target;
         const newMsg = { content: messageInput.value, id: nanoid(), user };
-        dispatch(pushMessage(newMsg));
+        dispatch(pushMessage({ message: newMsg, roomName: roomname }));
         messageInput.value = "";
     };
 
