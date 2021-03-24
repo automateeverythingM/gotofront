@@ -16,6 +16,7 @@ import { usersSelector } from "../app/reducers/roomReducer";
 import useTypingDebounce from "../utils/hooks/useTypingDebounce";
 import UsersMessage from "../components/UI/Message/UsersMessage";
 import Message from "../components/UI/Message/Message";
+import DigitInputs from "../components/UI/Inputs/digitInputs/DigitInputs";
 
 function Room(props) {
     const { roomname } = props;
@@ -23,6 +24,7 @@ function Room(props) {
     const messages = useSelector(messagesSelector);
     const user = useSelector(userSelector);
     const users = useSelector(usersSelector);
+    const [timerDigit, setTimerDigit] = useState(0);
     const [typing, setTyping] = useState(false);
     const typingDebounce = useTypingDebounce(
         () =>
@@ -96,27 +98,32 @@ function Room(props) {
                 Room name : <span style={{ color: "red" }}>{roomname}</span>
                 <div>
                     <h3>Users in this room</h3>
-                    <ul style={{ background: "teal" }}>
+                    <DigitInputs
+                        numberOfInputs={2}
+                        getNumberFromInputs={(number) => setTimerDigit(number)}
+                    />
+                    <div>Timer</div>
+                    <div>{timerDigit}</div>
+                    <div className="bg-yellow-100">
+                        <h3 className="font-bold text-xl">Users in room</h3>
                         {users.map(({ photoURL, displayName, uid }) => (
-                            <li key={uid}>
-                                <div>
-                                    <img
-                                        src={photoURL}
-                                        alt="avatar"
-                                        style={{
-                                            width: "50px",
-                                            height: "50px",
-                                            borderRadius: "9999px",
-                                        }}
-                                    />
-                                    <span>{displayName}</span> :
-                                </div>
-                            </li>
+                            <div className="inline-block mx-2">
+                                <img
+                                    src={photoURL}
+                                    alt="avatar"
+                                    style={{
+                                        width: "50px",
+                                        height: "50px",
+                                        borderRadius: "9999px",
+                                    }}
+                                />
+                                <span>{displayName}</span>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
                 <div
-                    className="flex flex-col justify-end"
+                    className="flex flex-col justify-end bg-blue-100"
                     style={{ height: "500px", overflow: "auto" }}
                 >
                     <div className=" overflow-y-auto">
@@ -125,7 +132,7 @@ function Room(props) {
                         ))}
                     </div>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="bg-green-100">
                     <div style={{ color: "#000000" }}>{typing}</div>
                     <input
                         type="text"
