@@ -73,7 +73,6 @@ function Room(props) {
             socket.removeAllListeners();
             dispatch(clearState());
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleInputChange = () => {
@@ -99,32 +98,12 @@ function Room(props) {
                 Room name : <span style={{ color: "red" }}>{roomname}</span>
                 <div>
                     <h3>Users in this room</h3>
-                    <ul style={{ background: "teal" }}>
-                        {users.map(({ photoURL, displayName, uid }) => (
-                            <li key={uid}>
-                                <div>
-                                    <img
-                                        src={photoURL}
-                                        alt="avatar"
-                                        style={{
-                                            width: "50px",
-                                            height: "50px",
-                                            borderRadius: "9999px",
-                                        }}
-                                    />
-                                    <span>{displayName}</span> :
-                                </div>
-                            </li>
                     <DigitInputs
                         numberOfInputs={2}
                         getNumberFromInputs={(number) => setTimerDigit(number)}
                     />
                     <div>Timer</div>
                     <div>{timerDigit}</div>
-
-                    <div className="bg-yellow-100">
-                        <h3 className="font-bold text-xl">Users in room</h3>
-
                     <div className="bg-yellow-100">
                         <h3 className="font-bold text-xl">Users in room</h3>
                         {users.map(({ photoURL, displayName, uid }) => (
@@ -163,7 +142,7 @@ function Room(props) {
                         onChange={handleInputChange}
                     />
                 </form>
-            </div>
+            </h1>
         </div>
     );
 }
