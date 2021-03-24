@@ -65,7 +65,7 @@ function HomePage() {
             {user ? (
                 <div>
                     <h3>Currently login user: {user.displayName}</h3>
-                    <img src={user.photoURL} alt="avatar" />
+                    <img className="mx-auto" src={user.photoURL} alt="avatar" />
                 </div>
             ) : (
                 <h3>No User</h3>
