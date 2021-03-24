@@ -107,7 +107,7 @@ function Room(props) {
                     <div className="bg-yellow-100">
                         <h3 className="font-bold text-xl">Users in room</h3>
                         {users.map(({ photoURL, displayName, uid }) => (
-                            <div className="inline-block mx-2">
+                            <div className="inline-block mx-2" key={uid}>
                                 <img
                                     src={photoURL}
                                     alt="avatar"
