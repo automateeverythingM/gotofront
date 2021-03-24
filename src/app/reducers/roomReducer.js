@@ -14,12 +14,8 @@ export const roomSlice = createSlice({
         },
         pushMessage: (state, action) => {
             const { message, roomName } = action.payload;
-            console.log(
-                "🚀 ~ file: roomReducer.js ~ line 17 ~ roomName",
-                roomName
-            );
             state.messages.push(message);
-            socket.emit("newMessage", message, roomName);
+            socket.emit("newMessage", { message, roomName });
         },
         pushReceivedMessage: (state, action) => {
             state.messages.push(action.payload);
@@ -33,9 +29,8 @@ export const roomSlice = createSlice({
             state.users.push(action.payload);
         },
         removeUser: (state, action) => {
-            state.users = state.users.filter(
-                (user) => user.uid !== action.payload
-            );
+            const { uid } = action.payload;
+            state.users = state.users.filter((user) => user.uid !== uid);
         },
         setInitialStateOfRoom: (state, action) => {
             const { messages, users } = action.payload;
