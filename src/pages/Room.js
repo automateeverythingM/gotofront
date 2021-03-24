@@ -99,7 +99,7 @@ function Room(props) {
                 <div>
                     <h3>Users in this room</h3>
                     <DigitInputs
-                        numberOfInputs={3}
+                        numberOfInputs={2}
                         getNumberFromInputs={(number) => setTimerDigit(number)}
                     />
                     <div>Timer</div>
