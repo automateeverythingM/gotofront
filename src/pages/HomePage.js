@@ -4,6 +4,7 @@ import md5 from "md5";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, userSelector } from "../app/reducers/userReducer";
 import { navigate } from "@reach/router";
+import "./homepage.css";
 
 function HomePage() {
     const [errorMsg, setErrorMsg] = useState("");
@@ -128,7 +129,7 @@ function HomePage() {
             </form>
             <div style={{ marginTop: "2rem" }}>
                 <br />
-                <button onClick={handleSignInGoogle}>
+                <button className="btn" onClick={handleSignInGoogle}>
                     sign in with Google
                 </button>
                 <br />
