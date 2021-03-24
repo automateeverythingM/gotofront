@@ -104,15 +104,8 @@ function Room(props) {
                     />
                     <div>Timer</div>
                     <div>{timerDigit}</div>
-<<<<<<< HEAD
-
                     <div className="bg-yellow-100">
                         <h3 className="font-bold text-xl">Users in room</h3>
-
-=======
-                    <div className="bg-yellow-100">
-                        <h3 className="font-bold text-xl">Users in room</h3>
->>>>>>> d901288878606e04c23581265932cbe01d69c29d
                         {users.map(({ photoURL, displayName, uid }) => (
                             <div className="inline-block mx-2">
                                 <img
