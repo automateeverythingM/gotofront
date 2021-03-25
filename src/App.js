@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { lazy, Suspense, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import { Router } from "@reach/router";
 import Layout from "./pages/Layout";
@@ -10,9 +10,11 @@ import HomePage from "./pages/HomePage";
 import Room from "./pages/Room";
 import Loading from "./pages/Loading";
 import RestrictedRoute from "./components/Routes/RestrictedRoute";
+import { userSelector } from "./app/reducers/userReducer";
 const Login = lazy(() => import("./pages/Login"));
 function App() {
     const dispatch = useDispatch();
+    const isUserAuth = useSelector(userSelector);
     useEffect(() => {
         const unsubscribe = onAuthChange(dispatch);
         return () => {
@@ -32,7 +34,11 @@ function App() {
                             restricted
                         />
                         <AuthRoute component={Room} path="/:roomname" />
-                        <Login path="/login" />
+                        <RestrictedRoute
+                            component={Login}
+                            restricted={isUserAuth}
+                            path="/login"
+                        />
                     </Layout>
                 </Router>
             </Suspense>
