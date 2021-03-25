@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { socket } from "..";
+import { socket } from "../../";
 import {
     clearState,
     messagesSelector,
@@ -10,13 +10,13 @@ import {
     pushReceivedMessage,
     removeUser,
     setInitialStateOfRoom,
-} from "../app/reducers/roomReducer";
-import { userSelector } from "../app/reducers/userReducer";
-import { usersSelector } from "../app/reducers/roomReducer";
-import useTypingDebounce from "../utils/hooks/useTypingDebounce";
-import UsersMessage from "../components/UI/Message/UsersMessage";
-import Message from "../components/UI/Message/Message";
-import DigitInputs from "../components/UI/Inputs/digitInputs/DigitInputs";
+} from "../../app/reducers/roomReducer";
+import { userSelector } from "../../app/reducers/userReducer";
+import { usersSelector } from "../../app/reducers/roomReducer";
+import useTypingDebounce from "../../utils/hooks/useTypingDebounce";
+import UsersMessage from "../../components/UI/Message/UsersMessage";
+import Message from "../../components/UI/Message/Message";
+import DigitInputs from "../../components/UI/Inputs/digitInputs/DigitInputs";
 
 function Room(props) {
     const { roomname } = props;
@@ -73,6 +73,7 @@ function Room(props) {
             socket.removeAllListeners();
             dispatch(clearState());
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleInputChange = () => {
