@@ -17,6 +17,7 @@ import useTypingDebounce from "../../utils/hooks/useTypingDebounce";
 import UsersMessage from "../../components/UI/Message/UsersMessage";
 import Message from "../../components/UI/Message/Message";
 import DigitInputs from "../../components/UI/Inputs/digitInputs/DigitInputs";
+import Timer from "../../components/Timer";
 
 function Room(props) {
     const { roomname } = props;
@@ -24,8 +25,8 @@ function Room(props) {
     const messages = useSelector(messagesSelector);
     const user = useSelector(userSelector);
     const users = useSelector(usersSelector);
-    const [timerDigit, setTimerDigit] = useState(0);
     const [typing, setTyping] = useState(false);
+    const [timer, setTimer] = useState(0);
     const typingDebounce = useTypingDebounce(
         () =>
             socket.emit("typing", {
@@ -99,12 +100,8 @@ function Room(props) {
                 Room name : <span style={{ color: "red" }}>{roomname}</span>
                 <div>
                     <h3>Users in this room</h3>
-                    <DigitInputs
-                        numberOfInputs={2}
-                        getNumberFromInputs={(number) => setTimerDigit(number)}
-                    />
                     <div>Timer</div>
-                    <div>{timerDigit}</div>
+                    <Timer timer={timer} setTimer={setTimer} />
                     <div className="bg-yellow-100">
                         <h3 className="font-bold text-xl">Users in room</h3>
                         {users.map(({ photoURL, displayName, uid }) => (

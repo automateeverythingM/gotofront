@@ -28,11 +28,6 @@ function App() {
                 <Router>
                     <Layout path="/">
                         <HomePage exact path="/" />
-                        <RestrictedRoute
-                            path="/r"
-                            component={Login}
-                            restricted
-                        />
                         <AuthRoute component={Room} path="/:roomname" />
                         <RestrictedRoute
                             component={Login}
