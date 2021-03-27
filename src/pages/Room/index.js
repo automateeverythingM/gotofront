@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { socket } from "../../";
 import {
+    cleanRoomSelector,
     clearState,
     messagesSelector,
     pushMessage,
@@ -10,13 +11,12 @@ import {
     pushReceivedMessage,
     removeUser,
     setInitialStateOfRoom,
+    setRoomCleaned,
 } from "../../app/reducers/roomReducer";
 import { userSelector } from "../../app/reducers/userReducer";
 import { usersSelector } from "../../app/reducers/roomReducer";
 import useTypingDebounce from "../../utils/hooks/useTypingDebounce";
-import UsersMessage from "../../components/UI/Message/UsersMessage";
 import Message from "../../components/UI/Message/Message";
-import DigitInputs from "../../components/UI/Inputs/digitInputs/DigitInputs";
 import Timer from "../../components/Timer";
 
 function Room(props) {
@@ -25,6 +25,7 @@ function Room(props) {
     const messages = useSelector(messagesSelector);
     const user = useSelector(userSelector);
     const users = useSelector(usersSelector);
+    const roomCleaned = useSelector(cleanRoomSelector);
     const [typing, setTyping] = useState(false);
     const [timer, setTimer] = useState(0);
     const typingDebounce = useTypingDebounce(
@@ -38,6 +39,8 @@ function Room(props) {
     );
 
     useEffect(() => {
+        //if user refresh page will track is cleanUp run
+        if (!roomCleaned) cleanUp();
         socket.emit("join room", { roomName: roomname, user });
         socket.on("updateMessages", (data) => {
             dispatch(pushReceivedMessage(data.message));
@@ -69,16 +72,19 @@ function Room(props) {
             setTyping(false);
         });
 
-        return () => {
-            socket.emit("leaveRoom", { roomName: roomname, user });
-            socket.removeAllListeners();
-            dispatch(clearState());
-        };
+        return cleanUp;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleInputChange = () => {
         typingDebounce();
+    };
+
+    const cleanUp = () => {
+        if (!roomCleaned) dispatch(setRoomCleaned(true));
+        socket.emit("leaveRoom", { roomName: roomname, user });
+        socket.removeAllListeners();
+        dispatch(clearState());
     };
 
     const handleSubmit = (e) => {

@@ -7,6 +7,7 @@ export const roomSlice = createSlice({
         roomName: "",
         messages: [],
         users: [],
+        roomCleaned: false,
     },
     reducers: {
         setRoomName: (state, action) => {
@@ -38,6 +39,9 @@ export const roomSlice = createSlice({
             state.messages = messages;
             state.users = users;
         },
+        setRoomCleaned: (state, action) => {
+            state.roomCleaned = action.payload;
+        },
     },
 });
 
@@ -49,9 +53,11 @@ export const {
     pushNewUser,
     removeUser,
     clearState,
+    setRoomCleaned,
 } = roomSlice.actions;
 
 export const messagesSelector = (state) => state.roomState.messages;
+export const cleanRoomSelector = (state) => state.roomState.roomCleaned;
 export const usersSelector = (state) => state.roomState.users;
 export default roomSlice.reducer;
 
