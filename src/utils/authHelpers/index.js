@@ -1,4 +1,4 @@
-import { setUser } from "../../app/reducers/userReducer";
+import { setUser, setLoadingUser } from "../../app/reducers/userReducer";
 import { auth } from "../../firebase";
 
 export const onAuthChange = (dispatch) => {
@@ -15,6 +15,7 @@ export const onAuthChange = (dispatch) => {
             dispatch(setUser(null));
         }
 
+        dispatch(setLoadingUser(false));
         return unsubscribe;
     });
 };
