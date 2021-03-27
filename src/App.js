@@ -11,7 +11,9 @@ import Room from "./pages/Room";
 import Loading from "./pages/Loading";
 import RestrictedRoute from "./components/Routes/RestrictedRoute";
 import { userSelector } from "./app/reducers/userReducer";
+import "react-notifications-component/dist/theme.css";
 const Login = lazy(() => import("./pages/Login"));
+const Notification = lazy(() => import("react-notifications-component"));
 function App() {
     const dispatch = useDispatch();
     const isUserAuth = useSelector(userSelector);
@@ -25,6 +27,7 @@ function App() {
     return (
         <div className="App">
             <Suspense fallback={<Loading />}>
+                <Notification />
                 <Router>
                     <Layout path="/">
                         <HomePage exact path="/" />
