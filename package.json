@@ -43,9 +43,12 @@
         ]
     },
     "devDependencies": {
+        "@editorjs/editorjs": "^2.19.3",
+        "@editorjs/paragraph": "^2.8.0",
         "@tailwindcss/postcss7-compat": "^2.0.4",
         "autoprefixer": "^9.8.6",
         "postcss": "^7.0.35",
+        "react-editor-js": "^1.9.0",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.4"
     }
 }
