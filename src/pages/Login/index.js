@@ -1,30 +1,13 @@
-import { useState } from "react";
-import { auth, githubProvider, googleProvider } from "../firebase";
-import md5 from "md5";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser, userSelector } from "../app/reducers/userReducer";
 import { navigate } from "@reach/router";
+import md5 from "md5";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../app/reducers/userReducer";
+import { auth, githubProvider, googleProvider } from "../../firebase";
 
-function HomePage() {
+function Login(props) {
     const [errorMsg, setErrorMsg] = useState("");
-    const user = useSelector(userSelector);
     const dispatch = useDispatch();
-
-    const handleSignInGoogle = () => {
-        auth.signInWithPopup(googleProvider).catch((error) => {
-            setErrorMsg(error.message);
-        });
-    };
-    const handleSignInGithub = () => {
-        auth.signInWithPopup(githubProvider).catch((error) => {
-            setErrorMsg(error.message);
-        });
-    };
-
-    const handleSignOut = () => {
-        auth.signOut();
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -50,41 +33,26 @@ function HomePage() {
         // .catch((error) => {
         //     setErrorMsg(error.message);
         // });
+
+        navigate(props.location.state?.backTo || "/");
     };
 
-    const handleChangeRoom = (e) => {
-        e.preventDefault();
-        const { roomName } = e.target;
-        if (roomName.value) navigate(`/${roomName.value}`);
+    const handleSignInGoogle = async () => {
+        await auth.signInWithPopup(googleProvider).catch((error) => {
+            setErrorMsg(error.message);
+        });
+        navigate(props.location.state?.backTo || "/");
+    };
+    const handleSignInGithub = async () => {
+        await auth.signInWithPopup(githubProvider).catch((error) => {
+            setErrorMsg(error.message);
+        });
+        navigate(props.location.state?.backTo || "/");
     };
 
     return (
         <div>
-            <h1>HomePage</h1>
-            {user ? (
-                <div>
-                    <h3>Currently login user: {user.displayName}</h3>
-                    <img src={user.photoURL} alt="avatar" />
-                </div>
-            ) : (
-                <h3>No User</h3>
-            )}
-            <form onSubmit={handleChangeRoom} style={{ margin: "2rem auto" }}>
-                <label htmlFor="roomname">Enter room name</label>
-                <input
-                    id="roomname"
-                    placeholder="Enter room name"
-                    name="roomName"
-                    type="text"
-                    style={{
-                        display: "block",
-                        margin: "auto",
-                        width: "400px",
-                        fontSize: "2rem",
-                    }}
-                    autoComplete="off"
-                />
-            </form>
+            <h1 className="font-bold text-4xl  mb-7">Login Page</h1>
             <form onSubmit={handleSubmit}>
                 <label>
                     UserName
@@ -128,16 +96,13 @@ function HomePage() {
             </form>
             <div style={{ marginTop: "2rem" }}>
                 <br />
-                <button onClick={handleSignInGoogle}>
+                <button className="btn" onClick={handleSignInGoogle}>
                     sign in with Google
                 </button>
                 <br />
                 <button onClick={handleSignInGithub}>
                     sign in with Github
                 </button>
-                <br />
-                <button onClick={handleSignOut}>sign out</button>
-                <br />
             </div>
             <div
                 style={{
@@ -154,4 +119,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default Login;

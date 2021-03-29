@@ -5,11 +5,14 @@ import App from "./App";
 import store from "./app/store";
 import { Provider } from "react-redux";
 import { io } from "socket.io-client";
-export const socket = io("https://gotoexpress.herokuapp.com/");
+import ErrorBoundary from "./components/ErrorBoundries";
+export const socket = io("http://localhost:5001");
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <ErrorBoundary>
+            <App />
+        </ErrorBoundary>
     </Provider>,
     document.getElementById("root")
 );
