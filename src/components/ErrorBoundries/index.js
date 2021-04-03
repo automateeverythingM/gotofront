@@ -11,6 +11,14 @@ class ErrorBoundary extends Component {
     }
 
     componentDidCatch(error, errorInfo) {
+        console.log(
+            "🚀 ~ file: index.js ~ line 14 ~ ErrorBoundary ~ componentDidCatch ~ errorInfo",
+            errorInfo
+        );
+        console.log(
+            "🚀 ~ file: index.js ~ line 14 ~ ErrorBoundary ~ componentDidCatch ~ error",
+            error
+        );
         // You can also log the error to an error reporting service
     }
 
