@@ -18,6 +18,9 @@ import { usersSelector } from "../../app/reducers/roomReducer";
 import useTypingDebounce from "../../utils/hooks/useTypingDebounce";
 import Message from "../../components/UI/Message/Message";
 import Timer from "../../components/Timer";
+import ChatInput from "../../components/UI/Inputs/chatInput";
+import EditorJsIndex from "../../components/UI/Inputs/chatInput/editorjsindex";
+import TinyEditor from "../../components/UI/Inputs/chatInput/tinyEditor";
 
 function Room(props) {
     const { roomname } = props;
@@ -108,6 +111,9 @@ function Room(props) {
                     <h3>Users in this room</h3>
                     <div>Timer</div>
                     <Timer timer={timer} setTimer={setTimer} />
+                    <ChatInput />
+                    <EditorJsIndex />
+                    {/* <TinyEditor /> */}
                     <div className="bg-yellow-100">
                         <h3 className="font-bold text-xl">Users in room</h3>
                         {users.map(({ photoURL, displayName, uid }) => (
