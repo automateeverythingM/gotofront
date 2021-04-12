@@ -15,15 +15,34 @@ function Timer() {
     return (
         <>
             <DigitInputs
-                numberOfInputs={2}
+                numberOfInputs={5}
                 getNumberFromInputs={(number) => setInitTime(number)}
             />
-
             <div>
-                <button onClick={start}>Start</button>
-                <button onClick={pause}>Pause</button>
-                <button onClick={stop}>STOP</button>
-                <button onClick={reset}>RESET</button>
+                <button className="btn" onClick={() => setInitTime(35)}>
+                    35
+                </button>
+                <button className="btn" onClick={() => setInitTime(45)}>
+                    45
+                </button>
+                <button className="btn" onClick={() => setInitTime(55)}>
+                    55
+                </button>
+                <button className="btn" onClick={() => setInitTime(65)}>
+                    65
+                </button>
+                <button className="btn" onClick={start}>
+                    Start
+                </button>
+                <button className="btn" onClick={pause}>
+                    Pause
+                </button>
+                <button className="btn" onClick={stop}>
+                    STOP
+                </button>
+                <button className="btn" onClick={reset}>
+                    RESET
+                </button>
             </div>
             <p>Elapsed time: {time}</p>
         </>
