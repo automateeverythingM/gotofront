@@ -3,6 +3,7 @@ import UsersMessage from "./UsersMessage";
 
 const MESSAGE_TYPE = { SERVER: "SERVER", USER: "USER" };
 const Message = ({ message }) => {
+    console.log("🚀 ~ file: Message.js ~ line 6 ~ Message ~ message", message);
     const { type } = message;
     switch (type.name) {
         case MESSAGE_TYPE.SERVER:

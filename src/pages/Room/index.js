@@ -13,14 +13,13 @@ import {
     setInitialStateOfRoom,
     setRoomCleaned,
 } from "../../app/reducers/roomReducer";
-import { userSelector } from "../../app/reducers/userReducer";
+import { setUser, userSelector } from "../../app/reducers/userReducer";
 import { usersSelector } from "../../app/reducers/roomReducer";
 import useTypingDebounce from "../../utils/hooks/useTypingDebounce";
 import Message from "../../components/UI/Message/Message";
 import Timer from "../../components/Timer";
 import ChatInput from "../../components/UI/Inputs/chatInput";
-import EditorJsIndex from "../../components/UI/Inputs/chatInput/editorjsindex";
-import TinyEditor from "../../components/UI/Inputs/chatInput/tinyEditor";
+import DrafTailInput from "../../components/UI/Inputs/chatInput/draftailinput";
 
 function Room(props) {
     const { roomname } = props;
@@ -75,6 +74,9 @@ function Room(props) {
             setTyping(false);
         });
 
+        socket.on("updateUser", (user) => {
+            dispatch(setUser(user));
+        });
         return cleanUp;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -91,15 +93,17 @@ function Room(props) {
     };
 
     const handleSubmit = (e) => {
+        console.log(user);
         e.preventDefault();
         const { messageInput } = e.target;
-        const newMsg = {
+        const message = {
             content: messageInput.value,
             uid: nanoid(),
-            user,
+            user: user,
             type: { name: "USER" },
         };
-        dispatch(pushMessage({ message: newMsg, roomName: roomname }));
+
+        dispatch(pushMessage({ message, roomName: roomname }));
         messageInput.value = "";
     };
 
@@ -111,9 +115,7 @@ function Room(props) {
                     <h3>Users in this room</h3>
                     <div>Timer</div>
                     <Timer timer={timer} setTimer={setTimer} />
-                    <ChatInput />
-                    <EditorJsIndex />
-                    {/* <TinyEditor /> */}
+                    {/* <ChatInput /> */}
                     <div className="bg-yellow-100">
                         <h3 className="font-bold text-xl">Users in room</h3>
                         {users.map(({ photoURL, displayName, uid }) => (
@@ -132,13 +134,14 @@ function Room(props) {
                         ))}
                     </div>
                 </div>
+                <DrafTailInput />
                 <div
                     className="flex flex-col justify-end bg-blue-100"
                     style={{ height: "500px", overflow: "auto" }}
                 >
                     <div className=" overflow-y-auto">
                         {messages.map((message) => (
-                            <Message message={message} />
+                            <Message key={message.uid} message={message} />
                         ))}
                     </div>
                 </div>
