@@ -1,3 +1,4 @@
+import { socket } from "../..";
 import { setUser, setLoadingUser } from "../../app/reducers/userReducer";
 import { auth } from "../../firebase";
 

@@ -10,9 +10,11 @@ import HomePage from "./pages/HomePage";
 import Room from "./pages/Room";
 import Loading from "./pages/Loading";
 import RestrictedRoute from "./components/Routes/RestrictedRoute";
-import { userSelector } from "./app/reducers/userReducer";
+import { setUser, userSelector } from "./app/reducers/userReducer";
 import "react-notifications-component/dist/theme.css";
-const Login = lazy(() => import("./pages/Login"));
+import { socket } from "./index";
+// const Login = lazy(() => import("./pages/Login"));
+import Login from "./pages/Login";
 const Notification = lazy(() => import("react-notifications-component"));
 function App() {
     const dispatch = useDispatch();
@@ -22,6 +24,7 @@ function App() {
         return () => {
             unsubscribe();
         };
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -33,11 +36,12 @@ function App() {
                     <Layout path="/">
                         <HomePage exact path="/" />
                         <AuthRoute component={Room} path="/:roomname" />
-                        <RestrictedRoute
+                        {/* <RestrictedRoute
                             component={Login}
                             restricted={isUserAuth}
                             path="/login"
-                        />
+                        /> */}
+                        <Login path="/login" />
                     </Layout>
                 </Router>
             </Suspense>

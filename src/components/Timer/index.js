@@ -9,13 +9,13 @@ function Timer() {
             console.log("ended");
             pushNotification({ content: <TimeEnds /> });
         },
-        autoStart: true,
+        autoStart: false,
     });
 
     return (
         <>
             <DigitInputs
-                numberOfInputs={5}
+                numberOfInputs={2}
                 getNumberFromInputs={(number) => setInitTime(number)}
             />
             <div>

@@ -1,26 +1,34 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import "draft-js/dist/Draft.css";
+import "draftail/dist/draftail.css";
+import {
+    DraftailEditor,
+    BLOCK_TYPE,
+    INLINE_STYLE,
+    ENTITY_TYPE,
+} from "draftail";
 
-import { EditorState } from "draft-js";
-import Editor from "@draft-js-plugins/editor";
-import { insertCharacter } from "./darftJsHelpers";
-
-//? draft-js plugins
+//?draft js plugins
 import createMentionPlugin, {
     defaultSuggestionsFilter,
 } from "@draft-js-plugins/mention";
 import createEmojiPlugin from "@draft-js-plugins/emoji";
 import createHashtagPlugin from "@draft-js-plugins/hashtag";
 import createLinkifyPlugin from "@draft-js-plugins/linkify";
-import createMarkdownPlugin from "draft-js-markdown-plugin";
-
-//? draft-js css
+import createPrismPlugin from "draft-js-prism-plugin";
+//?draft js css
 import "@draft-js-plugins/mention/lib/plugin.css";
 import "@draft-js-plugins/emoji/lib/plugin.css";
 import "draft-js/dist/Draft.css";
+import classes from "../chatInput/draftStyle.module.css";
 
-import "emoji-mart/css/emoji-mart.css";
-import classes from "./draftStyle.module.css";
+//?draft js
+
+//?emojis picker
 import { Picker } from "emoji-mart";
+import "emoji-mart/css/emoji-mart.css";
+//?Prism
+import Prism from "prismjs";
 
 const mentions = [
     {
@@ -57,11 +65,11 @@ const mentions = [
     },
 ];
 
-function ChatInput() {
-    const ref = useRef(null);
-    const [editorState, setEditorState] = useState(EditorState.createEmpty());
-    const [open, setOpen] = useState(false);
+function DrafTailInput() {
     const [suggestions, setSuggestions] = useState(mentions);
+    const [open, setOpen] = useState(false);
+
+    console.log(ENTITY_TYPE);
 
     const { MentionSuggestions, EmojiSuggestions, plugins } = useMemo(() => {
         const mentionPlugin = createMentionPlugin();
@@ -76,23 +84,26 @@ function ChatInput() {
         const linkifyPlugin = createLinkifyPlugin({
             theme: { link: classes.link },
         });
-        //markdown
-        const markdownPlugin = createMarkdownPlugin();
+        //prism hightlight
+        const prismPlugin = createPrismPlugin({
+            // It's required to provide your own instance of Prism
+            prism: Prism,
+        });
 
         const plugins = [
             mentionPlugin,
             emojiPlugin,
             hashtagPlugin,
             linkifyPlugin,
-            markdownPlugin,
+            prismPlugin,
         ];
         return { plugins, MentionSuggestions, EmojiSuggestions };
     }, []);
 
-    useEffect(() => {
-        const content = editorState.getCurrentContent();
-        console.log(content.getPlainText());
-    }, [editorState]);
+    const onSave = (content) => {
+        console.log("saving", content);
+        sessionStorage.setItem("draftail:content", JSON.stringify(content));
+    };
 
     const onSearchChange = useCallback(({ value }) => {
         setSuggestions(defaultSuggestionsFilter(value, mentions));
@@ -101,22 +112,46 @@ function ChatInput() {
         setOpen(open);
     }, []);
 
-    const onEmojiSelect = (emojiObject) => {
-        const state = insertCharacter(emojiObject.native, editorState);
-        setEditorState(state);
-    };
-
+    // const onEmojiSelect = (emojiObject) => {
+    //     const state = insertCharacter(emojiObject.native, editorState);
+    //     setEditorState(state);
+    // };
     return (
         <div>
-            <div
-                className="border-2 border-gray-400 w-80 mx-auto text-xl"
-                onClick={() => ref.current.focus()}
-            >
-                <Editor
-                    editorState={editorState}
-                    onChange={setEditorState}
+            <div>
+                <DraftailEditor
+                    onSave={onSave}
                     plugins={plugins}
-                    ref={ref}
+                    inlineStyles={[
+                        {
+                            label: "B",
+                            type: INLINE_STYLE.BOLD,
+                            style: {
+                                fontWeight: "bolder",
+                            },
+                        },
+                        { type: INLINE_STYLE.ITALIC },
+                        { type: INLINE_STYLE.CODE },
+                        { type: INLINE_STYLE.KEYBOARD },
+                        { type: INLINE_STYLE.UNDERLINE },
+                        { type: INLINE_STYLE.STRIKETHROUGH },
+                        { type: INLINE_STYLE.QUOTATION },
+                    ]}
+                    blockTypes={[
+                        { type: BLOCK_TYPE.CODE, style: { background: "red" } },
+                        { type: BLOCK_TYPE.HEADER_ONE },
+                        { type: BLOCK_TYPE.HEADER_TWO },
+                        { type: BLOCK_TYPE.HEADER_THREE },
+                        { type: BLOCK_TYPE.HEADER_FOUR },
+                        { type: BLOCK_TYPE.HEADER_FIVE },
+                        { type: BLOCK_TYPE.HEADER_SIX },
+                        { type: BLOCK_TYPE.UNORDERED_LIST_ITEM },
+                        { type: BLOCK_TYPE.ORDERED_LIST_ITEM },
+                        { type: BLOCK_TYPE.BLOCKQUOTE },
+                    ]}
+                    enableHorizontalRule
+                    showUndoControl
+                    showRedoControl
                 />
                 <MentionSuggestions
                     open={open}
@@ -134,10 +169,11 @@ function ChatInput() {
             </div>
             <Picker
                 set="twitter"
-                onSelect={onEmojiSelect}
+                // onSelect={onEmojiSelect}
                 include={["people"]}
             />
         </div>
     );
 }
-export default ChatInput;
+
+export default DrafTailInput;

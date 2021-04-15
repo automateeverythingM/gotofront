@@ -1,6 +1,6 @@
 import { navigate, Redirect } from "@reach/router";
 import { useSelector } from "react-redux";
-import { authLoading, userSelector } from "../../app/reducers/userReducer";
+import { authLoading } from "../../app/reducers/userReducer";
 import Loading from "../../pages/Loading";
 
 function RestrictedRoute({

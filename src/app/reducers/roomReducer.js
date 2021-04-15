@@ -14,8 +14,9 @@ export const roomSlice = createSlice({
             state.roomName = action.payload;
         },
         pushMessage: (state, action) => {
-            const { message, roomName } = action.payload;
-            state.messages.push(message);
+            const { message: msg, roomName } = action.payload;
+            state.messages.push(msg);
+            const message = { ...msg, user: msg.user.uid };
             socket.emit("newMessage", { message, roomName });
         },
         pushReceivedMessage: (state, action) => {
@@ -34,10 +35,10 @@ export const roomSlice = createSlice({
             state.users = state.users.filter((user) => user.uid !== uid);
         },
         setInitialStateOfRoom: (state, action) => {
-            const { messages, users } = action.payload;
+            const { messages, usersList } = action.payload;
 
             state.messages = messages;
-            state.users = users;
+            state.users = usersList;
         },
         setRoomCleaned: (state, action) => {
             state.roomCleaned = action.payload;
