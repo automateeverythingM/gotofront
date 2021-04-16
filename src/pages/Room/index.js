@@ -25,6 +25,7 @@ function Room(props) {
     const { roomname } = props;
     const dispatch = useDispatch();
     const messages = useSelector(messagesSelector);
+    console.log("🚀 ~ file: index.js ~ line 28 ~ Room ~ messages", messages);
     const user = useSelector(userSelector);
     const users = useSelector(usersSelector);
     const roomCleaned = useSelector(cleanRoomSelector);
@@ -42,7 +43,7 @@ function Room(props) {
 
     useEffect(() => {
         //if user refresh page will track is cleanUp run
-        if (!roomCleaned) cleanUp();
+        // if (!roomCleaned) cleanUp();
         socket.emit("join room", { roomName: roomname, user });
         socket.on("updateMessages", (data) => {
             dispatch(pushReceivedMessage(data.message));
@@ -77,7 +78,8 @@ function Room(props) {
         socket.on("updateUser", (user) => {
             dispatch(setUser(user));
         });
-        return cleanUp;
+
+        return () => cleanUp();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
